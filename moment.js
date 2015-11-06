@@ -3,7 +3,7 @@
 module.exports = function () {
     return {
         // А здесь часовой пояс
-        currentTimezone: 5,
+        currentTimezone: (-new Date().getTimezoneOffset()) / 60,
         oldTimezone: null,
         dateTime: null,
 
