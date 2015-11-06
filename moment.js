@@ -48,9 +48,9 @@ module.exports = function () {
                 }
                 return sentence.substring(2);
             });
-            return output[0] + weekDay[this.dateTime.getDay()] + output[1] +
-                this.addZero(this.dateTime.getHours()) + output[2] +
-                this.addZero(this.dateTime.getMinutes()) + output[3];
+            return output[0] + weekDay[this.dateTime.getUTCDay()] + output[1] +
+                this.addZero(this.dateTime.getUTCHours()) + output[2] +
+                this.addZero(this.dateTime.getUTCMinutes()) + output[3];
         },
 
         addZero: function (number) {
