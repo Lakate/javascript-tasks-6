@@ -39,7 +39,6 @@ module.exports = function () {
 
         // Выводит дату в переданном формате
         format: function (pattern) {
-            //this.getCurrentDate();
             var output = pattern.split('%');
             var weekDay = {0: 'ВС', 1: 'ПН', 2: 'ВТ', 3: 'СР', 4: 'ЧТ', 5: 'ПТ', 6: 'СБ'};
             output = output.map(function (sentence, index) {
@@ -48,9 +47,9 @@ module.exports = function () {
                 }
                 return sentence.substring(2);
             });
-            return output[0] + weekDay[this.dateTime.getUTCDay()] + output[1] +
-                this.addZero(this.dateTime.getUTCHours()) + output[2] +
-                this.addZero(this.dateTime.getUTCMinutes()) + output[3];
+            return output[0] + weekDay[this.dateTime.getDay()] + output[1] +
+                this.addZero(this.dateTime.getHours()) + output[2] +
+                this.addZero(this.dateTime.getMinutes()) + output[3];
         },
 
         addZero: function (number) {
