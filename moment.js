@@ -41,7 +41,7 @@ module.exports = function () {
         format: function (pattern) {
             //this.getCurrentDate();
             var output = pattern.split('%');
-            var weekDay = {0: 'Вc', 1: 'Пн', 2: 'Вт', 3: 'Ср', 4: 'Чт', 5: 'Пт', 6: 'Сб'};
+            var weekDay = {0: 'ВС', 1: 'ПН', 2: 'ВТ', 3: 'СР', 4: 'ЧТ', 5: 'ПТ', 6: 'СБ'};
             output = output.map(function (sentence, index) {
                 if (index === 0) {
                     return sentence;
