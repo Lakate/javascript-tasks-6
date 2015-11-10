@@ -1,5 +1,7 @@
 'use strict';
 
+var WEEK_DAY = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+
 module.exports = function () {
     return {
         // А здесь часовой пояс
@@ -18,12 +20,11 @@ module.exports = function () {
             if (typeof (value) === 'number') {
                 this.dateTime = new Date(value);
             } else {
-                var weekDay = {ВС: '01', ПН: '02', ВТ: '03',
-                    СР: '04', ЧТ: '05', ПТ: '06', СБ: '07'};
                 var utc = (value.substr(9).length > 1) ? value.substr(9) :
                 value.substr(8, 1) + '0' + value.substr(9);
                 this.timezone = Number(utc);
-                this.dateTime = new Date('2015-11-' + weekDay[value.substr(0, 2)] +
+                var day = '0' + (WEEK_DAY.indexOf(value.substr(0, 2)) + 1);
+                this.dateTime = new Date('2015-11-' + day +
                     'T' + value.substr(3, 5) + utc + ':00');
             }
         },
@@ -46,14 +47,13 @@ module.exports = function () {
                 return 'Ограбление не состоится=(';
             }
             var output = pattern.split('%');
-            var weekDay = {0: 'ВС', 1: 'ПН', 2: 'ВТ', 3: 'СР', 4: 'ЧТ', 5: 'ПТ', 6: 'СБ'};
             output = output.map(function (sentence, index) {
                 if (index === 0) {
                     return sentence;
                 }
                 return sentence.substring(2);
             });
-            return output[0] + weekDay[this.dateTime.getDay()] + output[1] +
+            return output[0] + WEEK_DAY[this.dateTime.getDay()] + output[1] +
                 this.addZero(this.dateTime.getHours()) + output[2] +
                 this.addZero(this.dateTime.getMinutes()) + output[3];
         },
