@@ -12,6 +12,9 @@ module.exports = function () {
         },
 
         set date(value) {
+            if (value === null) {
+                return;
+            }
             if (typeof (value) === 'number') {
                 this.dateTime = new Date(value);
             } else {
@@ -39,6 +42,9 @@ module.exports = function () {
 
         // Выводит дату в переданном формате
         format: function (pattern) {
+            if (this.dateTime === null) {
+                return 'Ограбление не состоится=(';
+            }
             var output = pattern.split('%');
             var weekDay = {0: 'ВС', 1: 'ПН', 2: 'ВТ', 3: 'СР', 4: 'ЧТ', 5: 'ПТ', 6: 'СБ'};
             output = output.map(function (sentence, index) {
@@ -75,8 +81,30 @@ module.exports = function () {
             var hours = Math.floor(time / 60 / 60 / 1000);
             time -= hours * 60 * 60 * 1000;
             var minutes = Math.floor(time / 60000);
-            return ('До ограбления осталось дней: ' + days +
-                ' , часов: ' + hours + ' , минут: ' + minutes);
+            var answerString;
+            if (days === 0) {
+                answerString = 'До ограбления осталось 0 дней ';
+            } else {
+                answerString = (days === 1) ?
+                    'До ограбления остался 1 день ' : 'До ограбления осталось ' + days + ' дня ';
+            }
+            if (hours % 10 === 1 && hours !== 11) {
+                answerString += hours + ' час ';
+            } else if (hours === 2 || hours === 3 || hours === 4 || hours === 22 || hours === 23) {
+                answerString += hours + ' часа ';
+            } else {
+                answerString += hours + ' часов ';
+            }
+            if (minutes % 10 === 1 && minutes !== 11) {
+                answerString += minutes + ' минута';
+            } else if (minutes % 10 === 2 & minutes !== 12 ||
+                minutes % 10 === 3 && minutes !== 13 ||
+                minutes % 10 === 4 && minutes !== 14) {
+                answerString += minutes + ' минуты';
+            } else {
+                answerString += minutes + ' минут';
+            }
+            return answerString;
         }
     };
 };

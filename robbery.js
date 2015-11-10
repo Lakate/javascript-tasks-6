@@ -25,7 +25,12 @@ module.exports.getAppropriateMoment = function (json, minDuration, workingHours)
             break;
         }
         this.setMs(workingHours, 'from', '0' + i);
-        this.setMs(workingHours, 'to', '0' + i);
+        if (Number(workingHours['from'].substring(0, 2)) >
+            Number(workingHours['to'].substring(0, 2))) {
+            this.setMs(workingHours, 'to', '0' + (i + 1));
+        } else {
+            this.setMs(workingHours, 'to', '0' + i);
+        }
         currentTime = workingHours.msfrom;
         currentAnswerTime = currentTime;
         while (currentTime <= workingHours.msto && freeMinutes < minDuration) {
@@ -58,6 +63,7 @@ module.exports.getAppropriateMoment = function (json, minDuration, workingHours)
     var appropriateMoment = moment();
     appropriateMoment.date = answerTime;
     appropriateMoment.timezone = workingHours.offset;
+    //appropriateMoment.timezone = 5;
     return appropriateMoment;
 };
 
@@ -82,9 +88,11 @@ module.exports.getDateString = function (workTime, date, day) {
     return dateString;
 };
 
-
 // Возвращает статус ограбления (этот метод уже готов!)
 module.exports.getStatus = function (moment, robberyMoment) {
+    if (robberyMoment.date === null) {
+        return 'Ограбление не состоится';
+    }
     if (moment.date < robberyMoment.date) {
         // «До ограбления остался 1 день 6 часов 59 минут»
         return robberyMoment.fromMoment(moment);
