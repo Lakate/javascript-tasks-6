@@ -83,7 +83,11 @@ module.exports = function () {
             var minutes = Math.floor(time / 60000);
             var answerString;
             if (days === 0) {
-                answerString = 'До ограбления осталось 0 дней ';
+                if (hours % 10 === 1 && hours !== 11) {
+                    answerString = 'До ограбления остался ';
+                } else {
+                    answerString = 'До ограбления осталось ';
+                }
             } else {
                 answerString = (days === 1) ?
                     'До ограбления остался 1 день ' : 'До ограбления осталось ' + days + ' дня ';

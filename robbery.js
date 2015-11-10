@@ -1,6 +1,7 @@
 'use strict';
 
 var moment = require('./moment');
+var WEEK_DAY = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
 
 // Выбирает подходящий ближайший момент начала ограбления
 module.exports.getAppropriateMoment = function (json, minDuration, workingHours) {
@@ -14,10 +15,9 @@ module.exports.getAppropriateMoment = function (json, minDuration, workingHours)
         }, this);
     }, this);
 
-    var currentTime;
     var minute = 60000;
     var freeMinutes = 0;
-    var answerTime = null;
+    var currentTime;
     var currentAnswerTime = null;
 
     for (var i = 2; i < 5; i++) {
@@ -56,18 +56,15 @@ module.exports.getAppropriateMoment = function (json, minDuration, workingHours)
         freeMinutes = (freeMinutes < minDuration) ? 0 : freeMinutes;
     }
 
-    answerTime = (freeMinutes === minDuration) ? currentAnswerTime : null;
-    // 1. Читаем json
-    // 2. Находим подходящий ближайший момент начала ограбления
-    // 3. И записываем в appropriateMoment
+    currentAnswerTime = (freeMinutes === minDuration) ? currentAnswerTime : null;
     var appropriateMoment = moment();
-    appropriateMoment.date = answerTime;
+    appropriateMoment.date = currentAnswerTime;
     appropriateMoment.timezone = workingHours.offset;
     //appropriateMoment.timezone = 5;
     return appropriateMoment;
 };
 
-// переводим время в UTC
+// переводим время в миллисекунды
 module.exports.setMs = function (workTime, type, weekDay) {
     var stringTime = (typeof (weekDay) === 'undefined') ?
         this.getDateString(workTime, workTime[type]) :
@@ -76,9 +73,8 @@ module.exports.setMs = function (workTime, type, weekDay) {
 };
 
 module.exports.getDateString = function (workTime, date, day) {
-    var weekDay = {'ПН': '02', ВТ: '03', СР: '04'};
     if (typeof (day) === 'undefined') {
-        day = weekDay[date.split(' ')[0]];
+        day = '0' + (WEEK_DAY.indexOf(date.split(' ')[0]) + 1);
         date = date.substring(3);
     }
     var utc = (date.substr(6).length > 1) ? date.substr(5) :
